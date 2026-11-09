@@ -238,7 +238,35 @@ def collect():
 
 
 # --------------------------------------------------------------------- filters
-def match(proc, name=None, port=None, user=None, cmd=None):
+def _self_pids():
+    """This process and every ancestor — never a legitimate target."""
+    pids = set()
+    pid = os.getpid()
+    for _ in range(64):  # bounded walk, guards against cycles
+        if pid in pids or pid <= 0:
+            break
+        pids.add(pid)
+        try:
+            with open(f"/proc/{pid}/stat", "r") as fh:
+                ppid = int(fh.read().split(") ", 1)[1].split()[1])
+        except (OSError, IndexError, ValueError):
+            try:
+                ppid = _ppid_windows(pid)
+            except Exception:
+                break
+        pid = ppid
+    return pids
+
+
+def _ppid_windows(pid):
+    raw = _run(["powershell", "-NoProfile", "-Command",
+                f"(Get-CimInstance Win32_Process -Filter 'ProcessId={pid}').ParentProcessId"])
+    return int(raw.strip() or 0)
+
+
+def match(proc, name=None, port=None, user=None, cmd=None, exclude=None):
+    if exclude and proc.pid in exclude:
+        return False
     if name:
         needle = name.lower()
         if needle not in proc.name.lower() and needle not in proc.cmd.lower():
@@ -320,7 +348,7 @@ def do_kill(args):
     if args.pid:
         targets = [p for p in procs if p.pid in args.pid]
     else:
-        targets = [p for p in procs if match(p, args.name, args.port, args.user, args.cmd)]
+        targets = [p for p in procs if match(p, args.name, args.port, args.user, args.cmd, exclude=_self_pids())]
     if not targets:
         print("no match — nothing killed")
         return 1
@@ -360,7 +388,7 @@ def do_kill(args):
 # ----------------------------------------------------------------------- verbs
 def cmd_scan(args):
     procs = collect()
-    rows = [p for p in procs if match(p, args.name, args.port, args.user, args.cmd)]
+    rows = [p for p in procs if match(p, args.name, args.port, args.user, args.cmd, exclude=_self_pids())]
     rows.sort(key=lambda p: (p.cpu, p.mem), reverse=True)
     if args.json:
         emit_json(rows)
@@ -393,7 +421,7 @@ def cmd_watch(args):
     print(f"watching {args.name or args.port} every {args.interval}s — Ctrl+C to stop")
     try:
         while True:
-            hits = [p for p in collect() if match(p, args.name, args.port, args.user, args.cmd)]
+            hits = [p for p in collect() if match(p, args.name, args.port, args.user, args.cmd, exclude=_self_pids())]
             stamp = time.strftime("%H:%M:%S")
             if hits:
                 render(hits, quiet=True)
