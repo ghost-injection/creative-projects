@@ -4,7 +4,8 @@ Tools built because the existing ones were polite, slow, or wrong.
 
 | Project | What it does | Platform |
 |---------|--------------|----------|
-| [`pid-sniper/`](pid-sniper/) | Single-file process hunter: find and kill by PID, name, port, or command line | Windows · Linux |
+| [`pid-sniper/`](pid-sniper/) | Windows GUI: click a window to get its PID, with a popup radar for new dialogs | Windows |
+| [`reaper/`](reaper/) | Single-file process hunter: find and kill by PID, name, port, or command line | Windows · Linux |
 
 ## Rules of this folder
 
