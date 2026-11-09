@@ -1,10 +1,11 @@
 # CREATIVE PROJECTS
 
+> PID Sniper moved to [AI-Research-OffSec](https://github.com/ghost-injection/AI-Research-OffSec).
+
 Tools built because the existing ones were polite, slow, or wrong.
 
 | Project | What it does | Platform |
 |---------|--------------|----------|
-| [`pid-sniper/`](pid-sniper/) | Windows GUI: click a window to get its PID, with a popup radar for new dialogs | Windows |
 | [`reaper/`](reaper/) | Single-file process hunter: find and kill by PID, name, port, or command line | Windows · Linux |
 
 ## Rules of this folder
