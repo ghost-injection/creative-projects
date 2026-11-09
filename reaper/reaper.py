@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-PID SNIPER — process hunter for operators who need the exact process, not a guess.
+REAPER — process hunter for operators who need the exact process, not a guess.
 
 Zero dependencies. Windows + Linux. One file.
 
-  pid-sniper scan                     # full process table, CPU/mem sorted
-  pid-sniper find --name chrome       # substring match on name/cmdline
-  pid-sniper find --port 8080         # who owns the listening socket
-  pid-sniper port 8080                # short form, prints PID + process
-  pid-sniper kill --pid 4242          # SIGTERM (Windows: terminate)
-  pid-sniper kill --name node --tree  # parent+children, verified
-  pid-sniper watch --name x --kill    # reaper loop
-  pid-sniper --json scan              # machine-readable
+  reaper scan                     # full process table, CPU/mem sorted
+  reaper find --name chrome       # substring match on name/cmdline
+  reaper find --port 8080         # who owns the listening socket
+  reaper port 8080                # short form, prints PID + process
+  reaper kill --pid 4242          # SIGTERM (Windows: terminate)
+  reaper kill --name node --tree  # parent+children, verified
+  reaper watch --name x --kill    # reaper loop
+  reaper --json scan              # machine-readable
 
 Safety: every kill supports --dry-run and prints the exact target set before firing.
 Nothing is killed by pattern without showing you the list first unless --yes is passed.
@@ -440,7 +440,7 @@ def cmd_watch(args):
 
 
 def build_parser():
-    ap = argparse.ArgumentParser(prog="pid-sniper", description="Hunt and kill processes by PID, name, port, or command line.")
+    ap = argparse.ArgumentParser(prog="reaper", description="Hunt and kill processes by PID, name, port, or command line.")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
     sub = ap.add_subparsers(dest="verb")
 
