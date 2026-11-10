@@ -17,15 +17,15 @@ rest of the Windows inspection tooling sits.
 ### reaper, in four commands
 
 ```bash
-reaper port 8080                        # which PID actually owns that socket
-reaper find --name node --dry-run       # who matches, before anything dies
-reaper kill --pid 4242 --tree           # process plus descendants, printed first
-reaper watch --name miner --kill        # loop until it stops coming back
+reaper port 8080                  # which PID actually owns that socket
+reaper find --name node           # who matches, with path, user and cmdline
+reaper kill --pid 4242 --tree     # process plus descendants, printed before it fires
+reaper watch --name miner --kill  # poll until the thing stops coming back
 ```
 
 Windows reads `Win32_Process` through `Get-CimInstance` (with `tasklist` as fallback)
 and `netstat -ano` for socket ownership; Linux reads `/proc/<pid>/stat`, `cmdline`,
-and file ownership. Both paths are in one 800-line file with no dependencies.
+and file ownership. Both paths live in one ~500-line file with no dependencies.
 
 ## How a project earns a directory here
 
