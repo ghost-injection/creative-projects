@@ -8,7 +8,7 @@ its own README, its own license if it differs, no shared library between them.
 
 | Project | Platform | One line |
 |---|---|---|
-| [`reaper/`](reaper/) | Windows · Linux | Process hunter: find by name, port, or command line, then kill the exact set — with a dry run first. |
+| [`reaper/`](reaper/) | Windows · Linux | Process hunter: find by name, port, or command line, then kill the exact set - with a dry run first. |
 
 `PID Sniper` used to live here. It moved to
 [AI-Research-OffSec](https://github.com/ghost-injection/AI-Research-OffSec) where the
